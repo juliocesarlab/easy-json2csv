@@ -1,18 +1,31 @@
 {
   "name": "easy-json2csv",
-  "version": "1.1.0",
-  "type": "module",
-  "main": "src/index.ts",
+  "version": "1.1.5",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
   },
-  "keywords": [],
   "author": "julicesarlab",
   "license": "ISC",
   "description": "A simple library for converting JSON into CSV",
   "files": [
     "dist/**/*"
+  ],
+  "keywords": [
+    "csv",
+    "easy",
+    "json",
+    "parser",
+    "converter",
+    "convert",
+    "parse",
+    "fast",
+    "simple",
+    "json2csv",
+    "json to csv"
   ],
   "devDependencies": {
     "@types/node": "^18.11.11",

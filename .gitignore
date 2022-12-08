@@ -1,4 +1,7 @@
+node_modules
 .csv
 .xlsx
 .xls
-testing.js
+testing.ts
+dist
+node_modules

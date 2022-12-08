@@ -1,23 +1,33 @@
 import * as fs from "fs";
+import ICsv from "./interfaces/ICsv";
+import { bodyColumn } from "./types/bodyColumn";
+import { headerColumn } from "./types/headerColumn";
 
-export default class CSV {
+export class CSV implements ICsv {
+  lineBreak: string;
+  columnDelimiter: string;
+  value: string;
+  header: headerColumn[];
+  body: bodyColumn[];
+  encoding: string;
+
   constructor(columnDelimiter = ";", lineBreak = "\n", encoding = "latin1") {
     this.lineBreak = lineBreak;
     this.columnDelimiter = columnDelimiter;
     this.value = "";
-    this.header = null;
-    this.body = null;
     this.encoding = encoding;
+    this.body = [];
+    this.header = [];
   }
 
-  setEncoding(encoding) {
+  setEncoding(encoding: string) {
     if (!encoding)
       throw new Error("You must provide a encoding when calling this method");
     this.encoding = encoding;
     return this;
   }
 
-  setHeader(header) {
+  setHeader(header: headerColumn[]) {
     if (!header) throw new Error("You must provide a header object first");
 
     this.header = header;
@@ -30,7 +40,7 @@ export default class CSV {
     return this;
   }
 
-  setBody(body) {
+  setBody(body: bodyColumn[]) {
     if (!this.header)
       throw new Error("You must set a header before calling this method");
 
@@ -51,8 +61,11 @@ export default class CSV {
   }
 
   write(path = "./", fileName = "file.csv") {
-    fs.writeFile(`${path}${fileName}`, this.value, this.encoding, (err) =>
-      console.log(err)
+    fs.writeFile(
+      `${path}${fileName}`,
+      this.value,
+      this.encoding as fs.WriteFileOptions,
+      (err) => console.log(err)
     );
   }
 }
