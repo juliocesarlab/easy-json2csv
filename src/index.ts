@@ -53,11 +53,21 @@ export class CSV implements ICsv {
           continue;
         }
 
-        this.value += `${columnValue} ${this.columnDelimiter}`;
+        this.value += `${this.normalizeColumnValue(columnValue)} ${
+          this.columnDelimiter
+        }`;
       }
       this.value += this.lineBreak;
     });
     return this;
+  }
+
+  private normalizeColumnValue(columnValue: string): string {
+    return columnValue
+      .toString()
+      .replace(/(\r\n|\n|\r)/gm, "")
+      .replace(/(",")/g, " ")
+      .replace(/(".")/g, "");
   }
 
   write(path = "./", fileName = "file.csv") {
