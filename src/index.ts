@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import { promises as fs } from "fs";
 import ICsv from "./interfaces/ICsv";
 import { bodyColumn } from "./types/bodyColumn";
 import { headerColumn } from "./types/headerColumn";
@@ -70,12 +70,11 @@ export class CSV implements ICsv {
       .replace(/(".")/g, "");
   }
 
-  write(path = "./", fileName = "file.csv") {
-    fs.writeFile(
+  async write(path = "./", fileName = "file.csv") {
+    await fs.writeFile(
       `${path}${fileName}`,
       this.value,
-      this.encoding as fs.WriteFileOptions,
-      (err) => console.log(err)
+      this.encoding as fs.CreateWriteStreamOptions
     );
   }
 }
