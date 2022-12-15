@@ -70,11 +70,22 @@ export class CSV implements ICsv {
       .replace(/(".")/g, "");
   }
 
-  async write(path = "./", fileName = "file.csv") {
+  async write(folderPath = "./", fileName = "file.csv") {
+    const folderExists = await fs
+      .opendir(folderPath)
+      .then(() => true)
+      .catch(() => false);
+
+    if (!folderExists) {
+      await fs.mkdir(folderPath, { recursive: true });
+    }
+
     await fs.writeFile(
-      `${path}${fileName}`,
+      `${folderPath}${fileName}`,
       this.value,
       this.encoding as fs.CreateWriteStreamOptions
     );
+
+    return this;
   }
 }

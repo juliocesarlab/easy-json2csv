@@ -2,6 +2,7 @@ node_modules
 .csv
 .xlsx
 .xls
-testing.ts
 dist
 node_modules
+testing/*
+*.csv
