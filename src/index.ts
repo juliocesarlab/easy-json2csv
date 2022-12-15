@@ -1,7 +1,9 @@
 import { promises as fs } from "fs";
+import { ReadableOptions, Stream } from "stream";
 import ICsv from "./interfaces/ICsv";
 import { bodyColumn } from "./types/bodyColumn";
 import { headerColumn } from "./types/headerColumn";
+import { WriteAsStreamOptions } from "./types/WriteAsStreamOptions";
 
 export class CSV implements ICsv {
   lineBreak: string;
@@ -62,14 +64,6 @@ export class CSV implements ICsv {
     return this;
   }
 
-  private normalizeColumnValue(columnValue: string): string {
-    return columnValue
-      .toString()
-      .replace(/(\r\n|\n|\r)/gm, "")
-      .replace(/(",")/g, " ")
-      .replace(/(".")/g, "");
-  }
-
   async write(folderPath = "./", fileName = "file.csv") {
     const folderExists = await fs
       .opendir(folderPath)
@@ -87,5 +81,38 @@ export class CSV implements ICsv {
     );
 
     return this;
+  }
+
+  async writeAsStream(options: WriteAsStreamOptions): Promise<Stream> {
+    const { encoding, hasSpecialChars } = options;
+
+    if (hasSpecialChars) {
+      await this.addSpecialCharsSupport();
+    }
+
+    const stream = await this.getStream(encoding);
+
+    return stream;
+  }
+
+  private async getStream(encoding: string = "latin1"): Promise<Stream> {
+    const stream = Stream.Readable.from(this.value, {
+      encoding: encoding ?? "latin1",
+    } as ReadableOptions);
+
+    return stream;
+  }
+
+  private async addSpecialCharsSupport() {
+    const BOM = "\ufeff";
+    this.value = `${BOM}${this.value}`;
+  }
+
+  private normalizeColumnValue(columnValue: string): string {
+    return columnValue
+      .toString()
+      .replace(/(\r\n|\n|\r)/gm, "")
+      .replace(/(",")/g, " ")
+      .replace(/(".")/g, "");
   }
 }

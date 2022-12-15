@@ -5,4 +5,5 @@ node_modules
 dist
 node_modules
 testing/*
+example/*
 *.csv

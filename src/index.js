@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.CSV = void 0;
 var fs_1 = require("fs");
+var stream_1 = require("stream");
 var CSV = /** @class */ (function () {
     function CSV(columnDelimiter, lineBreak, encoding) {
         if (columnDelimiter === void 0) { columnDelimiter = ";"; }
@@ -84,13 +85,6 @@ var CSV = /** @class */ (function () {
         });
         return this;
     };
-    CSV.prototype.normalizeColumnValue = function (columnValue) {
-        return columnValue
-            .toString()
-            .replace(/(\r\n|\n|\r)/gm, "")
-            .replace(/(",")/g, " ")
-            .replace(/(".")/g, "");
-    };
     CSV.prototype.write = function (folderPath, fileName) {
         if (folderPath === void 0) { folderPath = "./"; }
         if (fileName === void 0) { fileName = "file.csv"; }
@@ -115,6 +109,55 @@ var CSV = /** @class */ (function () {
                 }
             });
         });
+    };
+    CSV.prototype.writeAsStream = function (options) {
+        return __awaiter(this, void 0, void 0, function () {
+            var encoding, hasSpecialChars, stream;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        encoding = options.encoding, hasSpecialChars = options.hasSpecialChars;
+                        if (!hasSpecialChars) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.addSpecialCharsSupport()];
+                    case 1:
+                        _a.sent();
+                        _a.label = 2;
+                    case 2: return [4 /*yield*/, this.getStream(encoding)];
+                    case 3:
+                        stream = _a.sent();
+                        return [2 /*return*/, stream];
+                }
+            });
+        });
+    };
+    CSV.prototype.getStream = function (encoding) {
+        if (encoding === void 0) { encoding = "latin1"; }
+        return __awaiter(this, void 0, void 0, function () {
+            var stream;
+            return __generator(this, function (_a) {
+                stream = stream_1.Stream.Readable.from(this.value, {
+                    encoding: encoding !== null && encoding !== void 0 ? encoding : "latin1"
+                });
+                return [2 /*return*/, stream];
+            });
+        });
+    };
+    CSV.prototype.addSpecialCharsSupport = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var BOM;
+            return __generator(this, function (_a) {
+                BOM = "\ufeff";
+                this.value = "".concat(BOM).concat(this.value);
+                return [2 /*return*/];
+            });
+        });
+    };
+    CSV.prototype.normalizeColumnValue = function (columnValue) {
+        return columnValue
+            .toString()
+            .replace(/(\r\n|\n|\r)/gm, "")
+            .replace(/(",")/g, " ")
+            .replace(/(".")/g, "");
     };
     return CSV;
 }());
