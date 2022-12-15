@@ -1,4 +1,4 @@
 export type writeAsStreamOptions = {
-  encoding?: string;
+  encoding: string;
   hasSpecialChars: boolean;
 };
