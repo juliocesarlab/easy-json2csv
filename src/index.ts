@@ -3,7 +3,7 @@ import { ReadableOptions, Stream } from "stream";
 import ICsv from "./interfaces/ICsv";
 import { bodyColumn } from "./types/bodyColumn";
 import { headerColumn } from "./types/headerColumn";
-import { WriteAsStreamOptions } from "./types/WriteAsStreamOptions";
+import { writeAsStreamOptions } from "./types/writeAsStreamOptions";
 
 export class CSV implements ICsv {
   lineBreak: string;
@@ -83,7 +83,7 @@ export class CSV implements ICsv {
     return this;
   }
 
-  async writeAsStream(options: WriteAsStreamOptions): Promise<Stream> {
+  async writeAsStream(options: writeAsStreamOptions): Promise<Stream> {
     const { encoding, hasSpecialChars } = options;
 
     if (hasSpecialChars) {
