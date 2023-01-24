@@ -108,7 +108,9 @@ export class CSV implements ICsv {
     this.value = `${BOM}${this.value}`;
   }
 
-  private normalizeColumnValue(columnValue: string): string {
+  private normalizeColumnValue(columnValue: unknown): unknown {
+    if (typeof columnValue != "string") return columnValue;
+
     return columnValue
       .toString()
       .replace(/(\r\n|\n|\r)/gm, "")
