@@ -1,3 +1,3 @@
 export type bodyColumn = {
-  [key: string]: string;
-}
+  [key: string]: string | number;
+};
