@@ -109,7 +109,7 @@ export class CSV implements ICsv {
   }
 
   private normalizeColumnValue(columnValue: unknown): unknown {
-    if (typeof columnValue != "string") return columnValue;
+    if (typeof columnValue !== "string") return columnValue;
 
     return columnValue
       .toString()
